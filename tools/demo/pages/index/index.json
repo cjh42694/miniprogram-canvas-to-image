@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "canvas-to-image": "../../components/index"
+  }
+}

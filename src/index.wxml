@@ -1,0 +1,6 @@
+<canvas
+    style="width: {{showStyle.width}}rpx;height: {{showStyle.height}}rpx"
+    type="2d"
+    catchlongpress="saveImage"
+    id="showCanvas"
+/>

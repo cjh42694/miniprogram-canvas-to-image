@@ -1,0 +1,16 @@
+<canvas-to-image 
+    width="{{width}}"
+    height="{{height}}"
+    shareText="{{shareText}}"
+    bgImage="{{bgImage}}" 
+    shareText="{{shareText}}" 
+    qrCode="{{qrCode}}"
+    bindbeforecreate="beforecreate"
+    bindbeforesave="beforesave" 
+    bindsaved="saved"
+    binderror="showError"
+    id="savaCanvas"
+    show="{{true}}" 
+>
+</canvas-to-image>
+<button bindtap="save">保存到手机</button>
