@@ -64,12 +64,12 @@ npm install --save miniprogram-canvas-to-img
 | x           | Number  |         | 是   | 相对背景图X坐标           |
 | y           | Number  |         | 是   | 相对背景图的Y坐标      |
 | color           | String  |      black   | 否  | 颜色           |
-| fontSize           | Number  |      16   | 否   | 分享文案配置对象数组        |
-| bold           | Boolean  |      false   | 否   | 扩展分享图配置对象数组           |
-| textAlign           | String  |     left    | 否   | 扩展分享图配置对象数组           |
-| verticalAlign           | String  |    normal     | 否   | 扩展分享图配置对象数组           |
-| maxWidth           | Number  |      750   | 否   | 扩展分享图配置对象数组           |
-| lineHeight           | Number  |     1    | 否   | 扩展分享图配置对象数组           |
+| fontSize           | Number  |      16   | 否   | 字体大小        |
+| bold           | Boolean  |      false   | 否   | 是否加粗           |
+| textAlign           | String  |     left    | 否   | 文本水平对齐方式          |
+| verticalAlign           | String  |    normal     | 否   | 垂直对齐方式           |
+| maxWidth           | Number  |      750   | 否   | 最大宽度（超过换行）           |
+| lineHeight           | Number  |     1    | 否   | 行高           |
 
 
 #### qrCode / shareImage(item) 属性列表
@@ -79,8 +79,8 @@ npm install --save miniprogram-canvas-to-img
 | url           | String  |         | 是  | 二维码图片地址           |
 | x          | Number  |         | 是   | 相对背景图的X坐标         |
 | y           | String  |         | 是   | 相对背景图的Y坐标     |
-| width           | Number  | 140        | 是  | 二维码配置对象           |
-| height           | Number  |     140    | 否   | 分享文案配置对象数组        |
+| width           | Number  | 140        | 是  | 图片宽度           |
+| height           | Number  |     140    | 否   | 图片高度        |
 
 
 
