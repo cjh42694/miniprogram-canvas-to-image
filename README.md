@@ -17,7 +17,7 @@ npm install --save miniprogram-canvas-to-img
 ```
 {
   "usingComponents": {
-    "canvas-to-image": "canvas-to-image",
+    "canvas-to-image": "miniprogram-canvas-to-img",
   }
 }
 ```
@@ -44,7 +44,7 @@ npm install --save miniprogram-canvas-to-img
 
 ```
 
-##### 属性列表
+#### 属性列表
 
 | 属性            | 类型    | 默认值  | 必填 | 说明                   |
 | --------------- | ------- | ------- | ---- | ---------------------- |
@@ -55,6 +55,32 @@ npm install --save miniprogram-canvas-to-img
 | shareText           | Array  |         | 否   | 分享文案配置对象数组        |
 | shareImage           | Array  |         | 否   | 扩展分享图配置对象数组           |
 
+
+#### shareText  item属性列表
+
+| 属性            | 类型    | 默认值  | 必填 | 说明                   |
+| --------------- | ------- | ------- | ---- | ---------------------- |
+| value           | String  |         | 是  | 文案           |
+| x           | Number  |         | 是   | 相对背景图X坐标           |
+| y           | Number  |         | 是   | 相对背景图的Y坐标      |
+| color           | String  |      black   | 否  | 颜色           |
+| fontSize           | Number  |      16   | 否   | 分享文案配置对象数组        |
+| bold           | Boolean  |      false   | 否   | 扩展分享图配置对象数组           |
+| textAlign           | String  |     left    | 否   | 扩展分享图配置对象数组           |
+| verticalAlign           | String  |    normal     | 否   | 扩展分享图配置对象数组           |
+| maxWidth           | Number  |      750   | 否   | 扩展分享图配置对象数组           |
+| lineHeight           | Number  |     1    | 否   | 扩展分享图配置对象数组           |
+
+
+#### qrCode / shareImage(item) 属性列表
+
+| 属性            | 类型    | 默认值  | 必填 | 说明                   |
+| --------------- | ------- | ------- | ---- | ---------------------- |
+| url           | String  |         | 是  | 二维码图片地址           |
+| x          | Number  |         | 是   | 相对背景图的X坐标         |
+| y           | String  |         | 是   | 相对背景图的Y坐标     |
+| width           | Number  | 140        | 是  | 二维码配置对象           |
+| height           | Number  |     140    | 否   | 分享文案配置对象数组        |
 
 
 
