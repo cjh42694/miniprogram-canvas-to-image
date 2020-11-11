@@ -1,5 +1,5 @@
 {
-  "name": "canvas-to-image",
+  "name": "miniprogram-canvas-to-img",
   "version": "0.0.1",
   "description": "",
   "main": "miniprogram_dist/index.js",
@@ -30,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:cjh42694/miniprogram-canvas-to-image.git"
   },
   "author": "cjh",
   "license": "MIT",
@@ -56,8 +56,5 @@
     "webpack": "^4.29.5",
     "webpack-cli": "^3.3.10",
     "webpack-node-externals": "^1.7.2"
-  },
-  "dependencies": {
-    "widget-ui": "^1.0.2"
   }
 }

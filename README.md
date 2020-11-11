@@ -9,7 +9,7 @@
 #### Step1. npm 安装，参考 [小程序 npm 支持](https://developers.weixin.qq.com/miniprogram/dev/devtools/npm.html)
 
 ```
-npm install --save canvas-to-image
+npm install --save miniprogram-canvas-to-img
 ```
 
 #### Step2. JSON 组件声明
