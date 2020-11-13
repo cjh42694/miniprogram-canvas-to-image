@@ -21,6 +21,7 @@ module.exports = {
     'promise'
   ],
   'rules': {
+    indent: ["error", 4],
     'arrow-parens': 'off',
     'comma-dangle': [
       'error',
