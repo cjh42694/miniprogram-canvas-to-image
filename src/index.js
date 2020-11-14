@@ -141,15 +141,14 @@ Component({
     },
     methods: {
         _initTimeline() {
-            this.triggerEvent('beforecreate')
-            const scale = 1
-
+            this.triggerEvent('beforecreate');
             const {
                 qrCode,
                 bgImage,
                 shareText,
                 shareImage,
-                canvas
+                canvas,
+                zoom
             } = this.properties
             const {
                 width,
@@ -175,8 +174,8 @@ Component({
                     res,
                     0,
                     0,
-                    width,
-                    height
+                    width * zoom,
+                    height * zoom
                 )
                 showCtx.save()
                 return Promise.resolve()
@@ -202,10 +201,10 @@ Component({
                     const ele = shareImage[index]
                     showCtx.drawImage(
                         item,
-                        ele.x,
-                        ele.y,
-                        ele.width,
-                        ele.height
+                        ele.x * zoom,
+                        ele.y * zoom,    
+                        ele.width * zoom,
+                        ele.height *zoom
                     )
                     showCtx.restore()
                     showCtx.save()
@@ -236,7 +235,7 @@ Component({
                             const metrics = showCtx.measureText(arr[i])
                             lineWidth += metrics.width
                             if (lineWidth > maxWidth) {
-                                console.log(lineWidth, maxWidth, scale)
+                                console.log(lineWidth, maxWidth)
                                 shareTextTrans.push({
                                     ...item,
                                     value: arr.splice(0, i).join(''),
@@ -267,14 +266,11 @@ Component({
                 const shareTextTrans = formatShareText()
                 shareTextTrans.length && shareTextTrans.forEach((item) => {
                     // 字体重置
-                    showCtx.font = `normal normal ${item.fontSize}px sans-serif`
-                    if (item.font) {
-                        showCtx.font = item.font
-                    }
+                    showCtx.font = `normal normal ${item.fontSize * zoom}px sans-serif`
                     showCtx.fillStyle = item.color || 'black'
                     showCtx.textAlign = item.textAlign || 'left'
                     showCtx.textBaseline = item.verticalAlign || 'normal'
-                    showCtx.fillText(item.value, item.x, item.y)
+                    showCtx.fillText(item.value, item.x * zoom, item.y * zoom)
                     showCtx.save()
                 })
                 return Promise.resolve()
@@ -289,17 +285,16 @@ Component({
             const drawQrcode = (qrcodeImage) => {
                 // 自定义canvas事件触发
                 this.triggerEvent('custom', {
-                    showCtx,
-                    scale
+                    showCtx
                 })
                 // 绘制二维码
                 // 小程序码的位置，默认位置为左下角
                 showCtx.drawImage(
                     qrcodeImage,
-                    (qrCode.x),
-                    (qrCode.y),
-                    (qrCode.width || 140),
-                    (qrCode.height || 140)
+                    (qrCode.x *zoom),
+                    (qrCode.y * zoom),
+                    (qrCode.width * zoom),
+                    (qrCode.height * zoom)
                 )
                 showCtx.restore()
                 showCtx.save()
