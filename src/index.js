@@ -9,17 +9,17 @@
 const api = function (cmd, options = {}, ...rest) {
     return new Promise((resolve, reject) => {
         if (!wx[cmd]) {
-            reject('is not a wxApi')
+            reject('is not a wxApi');
         }
         options.success = (res) => {
-            resolve(res)
-        }
+            resolve(res);
+        };
         options.fail = (err) => {
-            reject(err)
-        }
-        wx[cmd](options, ...rest)
-    })
-}
+            reject(err);
+        };
+        wx[cmd](options, ...rest);
+    });
+};
 const reAuth = function (scope) {
     return new Promise((resolve, reject) => {
         wx.showModal({
@@ -29,22 +29,22 @@ const reAuth = function (scope) {
                 wx.openSetting({
                     success: (res) => {
                         if (res.authSetting[scope]) {
-                            return resolve(res)
+                            return resolve(res);
                         }
                         reject({
                             message: `权限${scope}未授权`
-                        })
+                        });
                     }
-                })
+                });
             },
             fail() {
                 reject({
                     message: `权限${scope}未授权`
-                })
+                });
             }
-        })
-    })
-}
+        });
+    });
+};
 Component({
     properties: {
         desiginWidth: {
@@ -79,43 +79,43 @@ Component({
     },
     observers: {
         show(val) {
-            if (!val) return
+            if (!val) return;
             const {
                 bgImage,
                 qrCode
-            } = this.properties
+            } = this.properties;
             if (!bgImage.width) {
                 return this.triggerEvent('error', {
                     message: 'bgImage.width不能为空'
-                })
+                });
             }
             if (!bgImage.height) {
                 return this.triggerEvent('error', {
                     message: 'bgImage.height不能为空'
-                })
+                });
             }
             if (!bgImage.url) {
                 return this.triggerEvent('error', {
                     message: 'bgImage.url不能为空'
-                })
+                });
             }
             if (!qrCode) {
                 return this.triggerEvent('error', {
                     message: 'qrCode不能为空'
-                })
+                });
             }
-            const query = this.createSelectorQuery()
+            const query = this.createSelectorQuery();
             query.select('#showCanvas').fields({
                 node: true,
                 size: true
             }).exec((res) => {
-                const canvas = res[0].node
-                const {width, height} = this.properties.bgImage
-                const {desiginWidth} = this.properties
-                canvas.width = width
-                canvas.height = height
-                const showCtx = canvas.getContext('2d')
-                const zoom = width / desiginWidth
+                const canvas = res[0].node;
+                const { width, height } = this.properties.bgImage;
+                const { desiginWidth } = this.properties;
+                canvas.width = width;
+                canvas.height = height;
+                const showCtx = canvas.getContext('2d');
+                const zoom = width / desiginWidth;
                 this.setData({
                     showCtx,
                     canvas,
@@ -125,9 +125,9 @@ Component({
                     },
                     zoom
                 }, () => {
-                    this._initTimeline()
-                })
-            })
+                    this._initTimeline();
+                });
+            });
         }
     },
     data: {
@@ -149,102 +149,102 @@ Component({
                 shareImage,
                 canvas,
                 zoom
-            } = this.properties
+            } = this.properties;
             const {
                 width,
                 height,
                 url
-            } = bgImage
+            } = bgImage;
             const {
                 showCtx,
-            } = this.data
-            console.log(this.properties, '---入参---')
-            const pipe = (...rest) => (x) => rest.reduce((p, fun) => p.then(fun), Promise.resolve(x))
+            } = this.data;
+            console.log(this.properties, '---入参---');
+            const pipe = (...rest) => (x) => rest.reduce((p, fun) => p.then(fun), Promise.resolve(x));
             // 获取用户信息
             const getBackground = () => new Promise((resolve, reject) => {
-                const bg = canvas.createImage()
-                bg.src = url
-                bg.onload = () => resolve(bg)
-                bg.onerror = (err) => reject(err)
-            })
+                const bg = canvas.createImage();
+                bg.src = url;
+                bg.onload = () => resolve(bg);
+                bg.onerror = (err) => reject(err);
+            });
             // 绘制背景图
             const drawBackground = (res) => {
-                console.log(res)
+                console.log(res);
                 showCtx.drawImage(
                     res,
                     0,
                     0,
-                    width * zoom,
-                    height * zoom
-                )
-                showCtx.save()
-                return Promise.resolve()
-            }
+                    width,
+                    height
+                );
+                showCtx.save();
+                return Promise.resolve();
+            };
             // 绘制分享图片
             const getShareImage = () => {
-                if (!shareImage.length) return Promise.resolve([])
+                if (!shareImage.length) return Promise.resolve([]);
                 return new Promise((resolve, reject) => {
-                    Promise.all(shareImage.map((img) => new Promise((resolve, reject) => {
-                        const bg = canvas.createImage()
-                        bg.src = img.url
-                        bg.onload = () => res(bg)
-                        bg.onerror = (err) => rej(err)
+                    Promise.all(shareImage.map((img) => new Promise((res, rej) => {
+                        const bg = canvas.createImage();
+                        bg.src = img.url;
+                        bg.onload = () => res(bg);
+                        bg.onerror = (err) => rej(err);
                     }))).then(([...imgList]) => {
-                        resolve(imgList)
+                        resolve(imgList);
                     }).catch((err) => {
-                        reject(err)
-                    })
-                })
-            }
+                        reject(err);
+                    });
+                });
+            };
             const drawShareImage = (imageInfo) => {
                 imageInfo.length && imageInfo.forEach((item, index) => {
-                    const ele = shareImage[index]
+                    const ele = shareImage[index];
                     showCtx.drawImage(
                         item,
                         ele.x * zoom,
                         ele.y * zoom,    
                         ele.width * zoom,
-                        ele.height *zoom
-                    )
-                    showCtx.restore()
-                    showCtx.save()
-                })
-                return Promise.resolve()
-            }
+                        ele.height * zoom
+                    );
+                    showCtx.restore();
+                    showCtx.save();
+                });
+                return Promise.resolve();
+            };
             // 分享文案格式化
             const formatShareText = () => {
-                const shareTextTrans = []
+                const shareTextTrans = [];
                 shareText.length && shareText.forEach((item) => {
-                    const maxWidth = parseInt(item.maxWidth || 750, 10)
-                    let lineHeight
-                    const valueArr = [...item.value].filter((a) => a !== undefined)
-                    item.lineHeight = item.lineHeight || 1
+                    const maxWidth = parseInt(item.maxWidth || 750, 10) * zoom;
+                    let lineHeight;
+                    const valueArr = [...item.value].filter((a) => a !== undefined);
+                    item.lineHeight = item.lineHeight || 1;
                     if (!isNaN(item.lineHeight)) {
-                        lineHeight = (item.fontSize || 16) * item.lineHeight
+                        lineHeight = (item.fontSize || 16) * item.lineHeight * zoom;
                     } else {
-                        lineHeight = parseInt(item.lineHeight, 10)
+                        lineHeight = parseInt(item.lineHeight, 10);
                     }
-                    let lineWidth = 0
-                    let paddingHeight = 0
+                    let lineWidth = 0;
+                    let paddingHeight = 0;
                     // 分割过长value值
                     function splitValue(arr) {
-                        console.log(arr)
-                        if (arr.length === 0) return false
+                        console.log(arr);
+                        if (arr.length === 0) return false;
                         for (let i = 0; i < arr.length; i++) {
-                            showCtx.font = `normal normal ${item.fontSize}px sans-serif`
-                            const metrics = showCtx.measureText(arr[i])
-                            lineWidth += metrics.width
+                            showCtx.font = `normal normal ${item.fontSize * zoom}px sans-serif`;
+                            const metrics = showCtx.measureText(arr[i]);
+                            lineWidth += metrics.width;
                             if (lineWidth > maxWidth) {
-                                console.log(lineWidth, maxWidth)
+                                console.log(lineWidth, maxWidth);
                                 shareTextTrans.push({
                                     ...item,
                                     value: arr.splice(0, i).join(''),
                                     y: item.y + paddingHeight
-                                })
-                                paddingHeight += lineHeight
-                                lineWidth = 0
-                                splitValue(arr)
-                                return true
+                                });
+                                paddingHeight += lineHeight;
+                                lineWidth = 0;
+                                splitValue(arr);
+                                return true;
                             }
                         }
                         if (lineWidth < maxWidth) {
@@ -252,67 +252,67 @@ Component({
                                 ...item,
                                 value: arr.join(''),
                                 y: item.y + paddingHeight
-                            })
+                            });
                         }
-                        return true
+                        return true;
                     }
-                    splitValue(valueArr)
-                    paddingHeight = 0
-                })
-                return shareTextTrans
-            }
+                    splitValue(valueArr);
+                    paddingHeight = 0;
+                });
+                return shareTextTrans;
+            };
             // 分享文案绘制
             const drawShareText = () => {
-                const shareTextTrans = formatShareText()
+                const shareTextTrans = formatShareText();
                 shareTextTrans.length && shareTextTrans.forEach((item) => {
                     // 字体重置
-                    showCtx.font = `normal normal ${item.fontSize * zoom}px sans-serif`
-                    showCtx.fillStyle = item.color || 'black'
-                    showCtx.textAlign = item.textAlign || 'left'
-                    showCtx.textBaseline = item.verticalAlign || 'normal'
-                    showCtx.fillText(item.value, item.x * zoom, item.y * zoom)
-                    showCtx.save()
-                })
-                return Promise.resolve()
-            }
+                    showCtx.font = `normal normal ${item.fontSize * zoom}px sans-serif`;
+                    showCtx.fillStyle = item.color || 'black';
+                    showCtx.textAlign = item.textAlign || 'left';
+                    showCtx.textBaseline = item.verticalAlign || 'normal';
+                    showCtx.fillText(item.value, item.x * zoom, item.y * zoom);
+                    showCtx.save();
+                });
+                return Promise.resolve();
+            };
             const getQrcode = () => new Promise((resolve, reject) => {
-                const bg = canvas.createImage()
-                bg.src = qrCode.url
-                bg.onload = () => resolve(bg)
-                bg.onerror = (err) => reject(err)
-            })
+                const bg = canvas.createImage();
+                bg.src = qrCode.url;
+                bg.onload = () => resolve(bg);
+                bg.onerror = (err) => reject(err);
+            });
             // 绘制二维码
             const drawQrcode = (qrcodeImage) => {
                 // 自定义canvas事件触发
                 this.triggerEvent('custom', {
                     showCtx
-                })
+                });
                 // 绘制二维码
                 // 小程序码的位置，默认位置为左下角
                 showCtx.drawImage(
                     qrcodeImage,
-                    (qrCode.x *zoom),
+                    (qrCode.x * zoom),
                     (qrCode.y * zoom),
                     (qrCode.width * zoom),
                     (qrCode.height * zoom)
-                )
-                showCtx.restore()
-                showCtx.save()
-                return Promise.resolve(true)
-            }
+                );
+                showCtx.restore();
+                showCtx.save();
+                return Promise.resolve(true);
+            };
             const drawFinish = () => {
-                console.log('---ws-moments---初始化完成')
+                console.log('---ws-moments---初始化完成');
                 this.triggerEvent('createdSuccess', {
                     showCtx
-                })
-            }
+                });
+            };
             const catchError = (error) => {
-                console.error('---ws-moments 出错---', error)
+                console.error('---ws-moments 出错---', error);
                 this.triggerEvent('error', {
                     message: '绘制出错，请查看error信息',
                     error
-                })
-            }
+                });
+            };
 
             pipe(
                 getBackground,
@@ -323,7 +323,7 @@ Component({
                 getQrcode,
                 drawQrcode,
                 drawFinish
-            )().catch(catchError)
+            )().catch(catchError);
         },
 
         // 保存图片到本地
@@ -332,8 +332,8 @@ Component({
                 canvas,
                 width,
                 height
-            } = this.properties
-            this.triggerEvent('beforesave')
+            } = this.properties;
+            this.triggerEvent('beforesave');
             api('canvasToTempFilePath', {
                 canvas,
                 width,
@@ -341,25 +341,25 @@ Component({
                 destWidth: width,
                 destHeight: height
             }, this).then((res) => {
-                console.log('---canvas转换图片成功---', res)
+                console.log('---canvas转换图片成功---', res);
                 return api('saveImageToPhotosAlbum', {
                     filePath: res.tempFilePath
-                })
+                });
             }).then((res) => {
-                console.log('---保存图片成功---', res)
+                console.log('---保存图片成功---', res);
                 this.triggerEvent('saved', {
                     download: true,
                     data: res
-                })
+                });
             }).catch((error) => {
-                console.error('-------保存出错误', error)
+                console.error('-------保存出错误', error);
                 this.triggerEvent('error', {
                     download: false,
                     error,
                     message: '保存出错，请查看error信息'
 
-                })
-            })
+                });
+            });
         },
 
         // 保存图片
@@ -369,19 +369,19 @@ Component({
                     api('authorize', {
                         scope: 'scope.writePhotosAlbum'
                     }).then(() => {
-                        this._saveImgIntoPhotos()
+                        this._saveImgIntoPhotos();
                     }).catch(() => {
-                        const self = this
+                        const self = this;
                         reAuth('scope.writePhotosAlbum').then(() => {
-                            self._saveImgIntoPhotos()
+                            self._saveImgIntoPhotos();
                         }).catch((err) => {
-                            console.log('reWritePhotosAlbumErr', err)
-                        })
-                    })
+                            console.log('reWritePhotosAlbumErr', err);
+                        });
+                    });
                 } else {
-                    this._saveImgIntoPhotos()
+                    this._saveImgIntoPhotos();
                 }
-            })
+            });
         }
     }
-})
+});
