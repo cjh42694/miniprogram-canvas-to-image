@@ -1,4 +1,4 @@
-# canvas-to-image
+# miniprogram-canvas-to-img
 
 
 小程序内通过传入背景图和二维码参数，生成朋友圈分享海报
